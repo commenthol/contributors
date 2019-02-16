@@ -59,6 +59,25 @@ exports.getContributors = ({
 };
 
 /**
+ * Merge list of contributors respecting manual name updates
+ *
+ * @param {string[]} current - list of current contributors
+ * @param {string[]} contributors - list of new contributors
+ * @returns {string[]} Sorted list of contributors
+ */
+exports.mergeContibutorNamesByEmail = ({current, contributors} = {}) => {
+  const currentMap = current.reduce((map, contributor) => {
+    const {email} = parseAuthor(contributor);
+    map.set(email, contributor);
+    return map;
+  }, new Map());
+  return contributors.map(contributor => {
+    const {email} = parseAuthor(contributor);
+    return currentMap.get(email) || contributor;
+  });
+};
+
+/**
  * Given a path to a package.json `pkg`, update Git contributors in the property defined by `property`, excluding those in the `exclude` array.
  *
  * @param {Object} [opts] - Options
@@ -90,10 +109,14 @@ exports.updateContributors = ({
 
   const contributors = exports.getContributors({exclude, cwd});
 
-  const newCount = contributors.length;
+  const newContributors = exports.mergeContibutorNamesByEmail({
+    current: pkgJson[property],
+    contributors
+  });
+  const newCount = newContributors.length;
 
   if (newCount !== currentCount) {
-    pkgJson[property] = contributors;
+    pkgJson[property] = newContributors;
     writePkg.sync(pkg, pkgJson);
 
     console.error(

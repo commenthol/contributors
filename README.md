@@ -60,6 +60,7 @@ Provides functions to get contributors from commit history, process and write th
 
 * [@mocha/contributors](#module_@mocha/contributors)
     * [.getContributors([opts])](#module_@mocha/contributors.getContributors) ⇒ <code>Array.&lt;string&gt;</code>
+    * [.mergeContibutorNamesByEmail(current, contributors)](#module_@mocha/contributors.mergeContibutorNamesByEmail) ⇒ <code>Array.&lt;string&gt;</code>
     * [.updateContributors([opts])](#module_@mocha/contributors.updateContributors) ⇒ <code>string</code>
 
 <a name="module_@mocha/contributors.getContributors"></a>
@@ -67,9 +68,9 @@ Provides functions to get contributors from commit history, process and write th
 #### @mocha/contributors.getContributors([opts]) ⇒ <code>Array.&lt;string&gt;</code>
 Get list of contributors to Git repo at path `cwd`, excluding names/emails defined in `exclude`.  `locale` and `localeOpts` must be consistent between calls in order to avoid too much churn in the contributors list.
 
-**Kind**: static method of [<code>@mocha/contributors</code>](#module_@mocha/contributors)
-**Returns**: <code>Array.&lt;string&gt;</code> - Sorted list of contributors
-**Access**: public
+**Kind**: static method of [<code>@mocha/contributors</code>](#module_@mocha/contributors)  
+**Returns**: <code>Array.&lt;string&gt;</code> - Sorted list of contributors  
+**Access**: public  
 **See**
 
 - https://git-scm.com/docs/git-log
@@ -84,7 +85,7 @@ Get list of contributors to Git repo at path `cwd`, excluding names/emails defin
 | [opts.locale] | <code>string</code> \| <code>Array.&lt;string&gt;</code> | <code>&quot;en-US&quot;</code> | Locale(s) to pass to `String.prototype.localeCompare` |
 | [opts.localeOpts] | <code>Object</code> | <code>{sensitivity: &#x27;accent&#x27;}</code> | Options for `String.prototype.localeCompare` |
 
-**Example**
+**Example**  
 ```js
 // get list of contributors for your package (without Guy Fieri)
 const {getContributors} = require('@mocha/contributors');
@@ -95,14 +96,27 @@ getContributors(
   {sensitivity: 'accent'}
 ); // returns Array of contributors
 ```
+<a name="module_@mocha/contributors.mergeContibutorNamesByEmail"></a>
+
+#### @mocha/contributors.mergeContibutorNamesByEmail(current, contributors) ⇒ <code>Array.&lt;string&gt;</code>
+Merge list of contributors respecting manual name updates
+
+**Kind**: static method of [<code>@mocha/contributors</code>](#module_@mocha/contributors)  
+**Returns**: <code>Array.&lt;string&gt;</code> - Sorted list of contributors  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| current | <code>Array.&lt;string&gt;</code> | list of current contributors |
+| contributors | <code>Array.&lt;string&gt;</code> | list of new contributors |
+
 <a name="module_@mocha/contributors.updateContributors"></a>
 
 #### @mocha/contributors.updateContributors([opts]) ⇒ <code>string</code>
 Given a path to a package.json `pkg`, update Git contributors in the property defined by `property`, excluding those in the `exclude` array.
 
-**Kind**: static method of [<code>@mocha/contributors</code>](#module_@mocha/contributors)
-**Returns**: <code>string</code> - Resulting `package.json`
-**Access**: public
+**Kind**: static method of [<code>@mocha/contributors</code>](#module_@mocha/contributors)  
+**Returns**: <code>string</code> - Resulting `package.json`  
+**Access**: public  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
